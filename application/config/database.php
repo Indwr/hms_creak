@@ -72,12 +72,27 @@
 $active_group = 'default';
 $query_builder = TRUE;
 
+if($_SERVER['HTTP_HOST']=="localhost")
+{
+	$hostname = 'localhost';
+	$username = 'root';
+	$password = 'password';
+	$database = 'creak_hms';
+
+}else{
+	$db['default']['hostname'] = 'localhost';
+	$db['default']['username'] = 'hms';
+	$db['default']['password'] = 'password';
+	$db['default']['database'] = 'creak_hms';
+}
+
+
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => 'password',
-	'database' => 'creak_hms',
+	'hostname' => $hostname,
+	'username' => $username,
+	'password' => $password,
+	'database' => $database,
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
