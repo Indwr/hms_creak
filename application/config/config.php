@@ -29,7 +29,7 @@ if($_SERVER['HTTP_HOST']=="localhost")
 {
   $config['base_url'] = 'http://localhost/dot-com-labs/creak/hms/smart_hospital_src/';
 }else{
-  $config['base_url'] = 'http://hms.y2matepro.com/';
+  $config['base_url'] = 'https://ottowala.com/';
 
 }
 
