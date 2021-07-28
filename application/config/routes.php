@@ -64,3 +64,8 @@ $route['read/(:any)'] = 'welcome/read/$1';
 $route['frontend'] = 'welcome';
 
 
+
+##=======Added By Indersein==========##
+$route['upgrade']['get'] = 'site/upgrade';
+$route['upgrade/package']['post'] = 'site/upgradeCircle';
+$route['upgrade/verify']['post'] = 'site/verify';
