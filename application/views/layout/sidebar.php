@@ -10,7 +10,7 @@
             </div>
         </form>
     <?php }?>
-    <section class="sidebar" id="sibe-box">
+    <section class="sidebar" id="sibe-box" style=" background-color: #042a4a;">
         <?php $this->load->view('layout/top_sidemenu');?>
         <ul class="sidebar-menu verttop">
             <?php
