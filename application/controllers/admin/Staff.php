@@ -1,4 +1,6 @@
 <?php
+use Razorpay\Api\Api;
+use Razorpay\Api\Errors\SignatureVerificationError;
 
 if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
@@ -10,6 +12,7 @@ class Staff extends Admin_Controller
     public function __construct()
     {
         parent::__construct();
+        require realpath(APPPATH . '../vendor/autoload.php');
         $this->config->load("payroll");
         $this->load->library('Enc_lib');
         $this->load->library('mailsmsconf');
@@ -161,12 +164,90 @@ class Staff extends Admin_Controller
         $this->load->view('admin/staff/disablestaff', $data);
         $this->load->view('layout/footer', $data);
     }
+    public function upgrade($id)
+    {
+            $checkUpgrade = $id;
+            $response['id'] = $checkUpgrade;
+            $where = [];
+            $order = 'asc';
+            $response['getSubscriptionsPlans'] = $this->user_model->getData('subscription_plans',$where,$order);
+            $where2 = ['user_id' => $checkUpgrade];
+            $response['getLastSubscriptions'] = $this->user_model->getDataWithLimit('subscription',$where2,'desc',1);
+            $response['upgradeId'] = $checkUpgrade;
+            $this->load->view('admin/upgrade',$response);
+    }
 
+    public function upgradeCircle($id){
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            $data = $this->security->xss_clean($this->input->post());
+            $where = ['id' => $id];
+            $userData = $this->user_model->getData('staff',$where,'asc');
+            $this->form_validation->set_rules('startDate', 'Start Date', 'trim|required|xss_clean');
+            $this->form_validation->set_rules('endDate', 'End Date', 'trim|required|xss_clean');
+            $this->form_validation->set_rules('amount', 'Amount', 'trim|required|xss_clean|numeric');
+            $this->form_validation->set_rules('circle', 'Circle', 'trim|required|xss_clean|numeric');
+            if ($this->form_validation->run() != FALSE) {
+                $api =   new Api('rzp_test_65XcijwZsuxIGr', 'VxawI2eWSo9H0krjCj1jxYQT');
+                $keyId = 'rzp_test_65XcijwZsuxIGr';
+                //
+                // We create an razorpay order using orders api
+                // Docs: https://docs.razorpay.com/docs/orders
+                //
+               
+                    $orderData = [
+                        'receipt'         => uniqid(),
+                        'amount'          => $data['amount'] * 100, // 2000 rupees in paise
+                        'currency'        => 'INR',
+                        'payment_capture' => 1 // auto capture
+                    ];
+
+                    $razorpayOrder = $api->order->create($orderData);
+
+                    $razorpayOrderId = $razorpayOrder['id'];
+
+                    $_SESSION['razorpay_order_id'] = $razorpayOrderId;
+
+                    $displayAmount = $amount = $orderData['amount'];
+                    $data = [
+                        "key"               => $keyId,
+                        "amount"            => $amount,
+                        "name"              => $userData[0]->name,
+                        "description"       => "Subscription Payment",
+                        "image"             => base_url('uploads/hospital_content/logo/0.png'),
+                        "prefill"           => [
+                        "name"              => $userData[0]->name,
+                        "email"             => $_SESSION['hospitaladmin']['email'],
+                        "contact"           => $userData[0]->contact_no,
+                        ],
+                        "notes"             => [
+                        "user_id"           => $userData[0]->id,
+                        "amount"            => $data['amount'],
+                        "startDate"            => $data['startDate'],
+                        "circle"            => $data['circle'],
+                        "address"           => $userData[0]->permanent_address,
+                        ],
+                        "theme"             => [
+                        "color"             => "#F37254"
+                        ],
+                        "order_id"          => $razorpayOrderId,
+                    ];
+                    $response['json'] = json_encode($data);
+                    $response['data'] = $data;
+                    $this->load->view("admin/checkout/automatic", $response);
+            }else{
+                $this->session->set_flashdata('error', strip_tags(validation_errors()));
+                redirect($_SERVER['HTTP_REFERER']);
+            }
+        }else{
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+    }
     public function profile($id)
     {
         if (!$this->rbac->hasPrivilege('staff', 'can_view')) {
             access_denied();
         }
+       
         $data['enable_disable'] = 1;
         $staff_data             = $this->session->flashdata('staff_data');
         $data['staff_data']     = $staff_data;
@@ -184,12 +265,14 @@ class Staff extends Admin_Controller
         $data["timeline_list"]       = $timeline_list;
         $staff_payroll               = $this->staff_model->getStaffPayroll($id);
         $staff_leaves                = $this->leaverequest_model->staff_leave_request($id);
+        $billingData                = $this->leaverequest_model->getData('subscription',$id);
         $alloted_leavetype           = $this->staff_model->allotedLeaveType($id);
         $salary                      = $this->payroll_model->getSalaryDetails($id);
         $attendencetypes             = $this->staffattendancemodel->getStaffAttendanceType();
         $data['attendencetypeslist'] = $attendencetypes;
         $i                           = 0;
         $leaveDetail                 = array();
+       
         foreach ($alloted_leavetype as $key => $value) {
             $count_leaves[]                   = $this->leaverequest_model->countLeavesData($id, $value["leave_type_id"]);
             $leaveDetail[$i]['type']          = $value["type"];
@@ -197,8 +280,10 @@ class Staff extends Admin_Controller
             $leaveDetail[$i]['approve_leave'] = $count_leaves[$i]['approve_leave'];
             $i++;
         }
+        
         $data["leavedetails"]  = $leaveDetail;
         $data["staff_leaves"]  = $staff_leaves;
+        $data['billingData']   = $billingData;
         $data['staff_doc_id']  = $id;
         $data['staff']         = $staff_info;
         $data['staff_payroll'] = $staff_payroll;
@@ -209,16 +294,17 @@ class Staff extends Admin_Controller
         $data['yearlist']      = $this->staffattendancemodel->attendanceYearCount();
         $year                  = date("Y");
         $j                     = 0;
-        for ($n = 1; $n <= 31; $n++) {
+        for ($n = 1; $n <= 28; $n++) {
             $att_date           = sprintf("%02d", $n);
             $attendence_array[] = $att_date;
             foreach ($monthlist as $key => $value) {
                 $datemonth       = date("m", strtotime($value));
                 $att_dates       = $year . "-" . $datemonth . "-" . sprintf("%02d", $n);
                 $date_array[]    = $att_dates;
+               
                 $res[$att_dates] = $this->staffattendancemodel->searchStaffattendance($id, $att_dates);
             }
-
+           
             $j++;
         }
         $start_year               = date("Y");
