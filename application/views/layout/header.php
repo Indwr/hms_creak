@@ -67,7 +67,7 @@ if ($this->customlib->getRTL() != "") {
         <?php
 if ($this->config->item('SHLK') == "") {
     ?>
-            <div class="topaleart">
+            <div class="topaleart" style="display:none">
                 <div class="slidealert">
                     <div class="alert alert-dismissible topaleart-inside">
                         <p class="palert">Alert! You are using unregistered version of Smart Hospital. Please <a  href="#" class="purchasemodal">click here</a> to register your purchase code for Smart Hospital.</p>
