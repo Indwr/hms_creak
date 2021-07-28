@@ -80,10 +80,10 @@ if($_SERVER['HTTP_HOST']=="localhost")
 	$database = 'creak_hms';
 
 }else{
-	$db['default']['hostname'] = 'localhost';
-	$db['default']['username'] = 'admin_hms';
-	$db['default']['password'] = 'bf6IbbkXT9';
-	$db['default']['database'] = 'admin_hms';
+	$hostname = 'localhost';
+	$username = 'admin_hms';
+	$password = 'bf6IbbkXT9';
+	$database = 'admin_hms';
 }
 
 
