@@ -10,16 +10,16 @@
                        <h3 class="box-title titlefix"><?php echo $this->lang->line('sms_setting'); ?></h3>
                     </div>
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab_1" data-toggle="tab"><?php echo $this->lang->line('clickatell_sms_gateway'); ?></a></li>
+                        <!-- <li class="active"><a href="#tab_1" data-toggle="tab"><?php echo $this->lang->line('clickatell_sms_gateway'); ?></a></li>
                         <li><a href="#tab_2" data-toggle="tab"><?php echo $this->lang->line('twilio_sms_gateway'); ?></a></li>
                         <li><a href="#tab_3" data-toggle="tab"><?php echo $this->lang->line('custom_sms_gateway'); ?></a></li>
-                        <li><a href="#tab_4" data-toggle="tab"><?php echo $this->lang->line('MSG_91'); ?></a></li>
-                        <li><a href="#tab_5" data-toggle="tab"><?php echo $this->lang->line('SMS_country'); ?></a></li>
-                        <li><a href="#tab_6" data-toggle="tab"><?php echo $this->lang->line('Text_Local'); ?></a></li>
-
+                        <li><a href="#tab_4" data-toggle="tab"><?php echo $this->lang->line('MSG_91'); ?></a></li> -->
+                        <!-- <li><a href="#tab_5" data-toggle="tab"><?php echo $this->lang->line('SMS_country'); ?></a></li> -->
+                        <!-- <li><a href="#tab_6" data-toggle="tab"><?php echo $this->lang->line('Text_Local'); ?></a></li> -->
+                        <li class="active"><a href="#tab_7" data-toggle="tab"><?= 'SMS EBOYO' ?></a></li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab_1">
+                        <!-- <div class="tab-pane active" id="tab_1">
                             <form role="form" id="clickatell" action="<?php echo site_url('smsconfig/clickatell') ?>" class="form-horizontal" method="post">
                                 <div class="box-body">
                                     <div class="row">
@@ -82,16 +82,15 @@
                                     </div>
 
                                 </div>
-                                <!-- /.box-body -->
                             <?php if ($this->rbac->hasPrivilege('sms_setting', 'can_edit')) { ?>
                                 <div class="box-footer">
                                     <button type="submit" class="btn btn-primary col-md-offset-3"><?php echo $this->lang->line('save'); ?></button>&nbsp;&nbsp;<span class="clickatell_loader"></span>
                                 </div>
                             <?php } ?>
                             </form>
-                        </div>
-                        <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_2">
+                        </div> -->
+                     
+                        <!-- <div class="tab-pane" id="tab_2">
                             <form role="form" id="twilio" id="twilio" action="<?php echo site_url('smsconfig/twilio') ?>" class="form-horizontal" method="post">
                                 <div class="box-body">
                                     <div class="row">
@@ -151,14 +150,13 @@
                                     </div>
 
                                 </div>
-                                <!-- /.box-body -->
                                 <div class="box-footer">
                                     <button type="submit" class="btn btn-primary col-md-offset-3"><?php echo $this->lang->line('save'); ?></button>&nbsp;&nbsp;<span class="twilio_loader"></span>
                                 </div>
                             </form>
-                        </div>
+                        </div> -->
                         <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_3">
+                        <!-- <div class="tab-pane" id="tab_3">
                             <form role="form" id="custom" id="custom" action="<?php echo site_url('smsconfig/custom') ?>" class="form-horizontal" method="post">
                                 <div class="box-body">
                                     <div class="row">
@@ -206,16 +204,13 @@
                                     </div>
 
                                 </div>
-                                <!-- /.box-body -->
 
                                 <div class="box-footer">
                                     <button type="submit" class="btn btn-primary col-md-offset-3"><?php echo $this->lang->line('save'); ?></button>&nbsp;&nbsp;<span class="custom_loader"></span>
                                 </div>
                             </form>
-                        </div>
-                        <!-- /.tab-pane -->
-                        <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_4">
+                        </div> -->
+                        <!-- <div class="tab-pane" id="tab_4">
                             <form role="form" id="msg_nineone" id="msg_nineone" action="<?php echo site_url('smsconfig/msgnineone') ?>" class="form-horizontal" method="post">
                                 <div class="box-body">
                                     <div class="row">
@@ -269,14 +264,12 @@
                                     </div>
 
                                 </div>
-                                <!-- /.box-body -->
                                 <div class="box-footer">
                                     <button type="submit" class="btn btn-primary col-md-offset-3"><?php echo $this->lang->line('save'); ?></button>&nbsp;&nbsp;<span class="msg_nineone_loader"></span>
                                 </div>
                             </form>
-                        </div>
-                        <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_5">
+                        </div> -->
+                        <!-- <div class="tab-pane" id="tab_5">
                             <form role="form" id="smscountry" id="smscountry" action="<?php echo site_url('smsconfig/smscountry') ?>" class="form-horizontal" method="post">
                                 <div class="box-body">
                                     <div class="row">
@@ -337,15 +330,12 @@
                                     </div>
 
                                 </div>
-                                <!-- /.box-body -->
-
                                 <div class="box-footer">
                                     <button type="submit" class="btn btn-primary col-md-offset-3"><?php echo $this->lang->line('save'); ?></button>&nbsp;&nbsp;<span class="smscountry_loader"></span>
                                 </div>
                             </form>
-                        </div>
-                        <!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_6">
+                        </div> -->
+                        <!-- <div class="tab-pane" id="tab_6">
 
                             <form role="form" id="text_local" id="text_local" action="<?php echo site_url('smsconfig/textlocal') ?>" class="form-horizontal" method="post">
                                 <div class="box-body">
@@ -405,12 +395,75 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-                                <!-- /.box-body -->
-
                                 <div class="box-footer">
                                     <button type="submit" class="btn btn-primary col-md-offset-3"><?php echo $this->lang->line('save'); ?></button>&nbsp;&nbsp;<span class="text_local_loader"></span>
+                                </div>
+                            </form>
+                        </div> -->
+                        <div class="tab-pane active" id="tab_7">
+                            <form role="form" id="smsEboyo" action="<?php echo site_url('smsconfig/smsEboyo') ?>" class="form-horizontal" method="post">
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-12 minheight170">
+                                            <div class="col-md-7">
+                                                <?php
+                                                $smscountry_result = check_in_array('smseboyo', $smslist);
+                                                ?>
+                                                <div class="form-group">
+                                                    <label class="col-sm-5 control-label"><?php echo $this->lang->line('username'); ?> <small class="req"> *</small></label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" name="smscountry" value="<?php echo $smscountry_result->username; ?>">
+                                                        <span class="text text-danger smscountry_error"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-5 control-label"><?php echo $this->lang->line('sender_id'); ?> <small class="req"> *</small></label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" name="smscountrysenderid" value="<?php echo $smscountry_result->senderid; ?>">
+                                                        <span class="text text-danger smscountrysenderid_error"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-5 control-label"><?= 'Key' ?> <small class="req"> *</small></label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control" name="smscountrypassword" value="<?php echo $smscountry_result->password; ?>">
+                                                        <span class="text text-danger smscountrypassword_error"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-sm-5 control-label"><?php echo $this->lang->line('status'); ?></label>
+                                                    <div class="col-sm-7">
+                                                        <select class="form-control" name="smscountry_status">
+                                                            <?php
+                                                            foreach ($statuslist as $s_key => $s_value) {
+                                                                ?>
+                                                                <option 
+                                                                    value="<?php echo $s_key; ?>"
+                                                                    <?php
+                                                                    if ($smscountry_result->is_active == $s_key) {
+                                                                        echo "selected=selected";
+                                                                    }
+                                                                    ?>
+                                                                    ><?php echo $s_value; ?></option>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                        </select>
+                                                        <span class=" text text-danger clickatell_api_id_error"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5  text text-center disblock">
+                                                <a href="https://sms.eboyo.co.in/" target="_blank"><img height="100px" src="https://www.eboyo.co.in/13.png"><p>https://sms.eboyo.co.in/</p></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary col-md-offset-3"><?php echo $this->lang->line('save'); ?></button>&nbsp;&nbsp;<span class="smscountry_loader"></span>
                                 </div>
                             </form>
                         </div>
@@ -594,6 +647,39 @@ function check_in_array($find, $array) {
             dataType: 'JSON',
             url: url,
             data: $("#smscountry").serialize(), // serializes the form's elements.
+            success: function (data, textStatus, jqXHR)
+            {
+                if (data.st === 1) {
+                    $.each(data.msg, function (key, value) {
+                        $('.' + key + "_error").html(value);
+                    });
+                } else {
+                    successMsg(data.msg);
+                }
+                $(".smscountry_loader").html("");
+
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                $(".msg_nineone_loader").html("");
+                //if fails      
+            }
+        });
+
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
+
+    $("#smsEboyo").submit(function (e) {
+        $("[class$='_error']").html("");
+
+        $(".smscountry_loader").html('<img src="' + img_path + '">');
+        var url = $(this).attr('action'); // the script where you handle the form input.
+
+        $.ajax({
+            type: "POST",
+            dataType: 'JSON',
+            url: url,
+            data: $("#smsEboyo").serialize(), // serializes the form's elements.
             success: function (data, textStatus, jqXHR)
             {
                 if (data.st === 1) {
