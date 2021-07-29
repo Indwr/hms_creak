@@ -161,6 +161,33 @@ class Smsconfig extends Admin_Controller
         }
     }
 
+    public function smsEboyo(){
+        $this->form_validation->set_error_delimiters('', '');
+        $this->form_validation->set_rules('smscountry', $this->lang->line('username'), 'required');
+        $this->form_validation->set_rules('smscountrypassword', $this->lang->line('password'), 'required');
+        $this->form_validation->set_rules('smscountrysenderid', $this->lang->line('sender_id'), 'required');
+        if ($this->form_validation->run()) {
+            $data = array(
+                'type'      => 'smseboyo',
+                'username'  => $this->input->post('smscountry'),
+                'password'  => $this->input->post('smscountrypassword'),
+                'senderid'  => $this->input->post('smscountrysenderid'),
+                'is_active' => $this->input->post('smscountry_status'),
+            );
+            $this->smsconfig_model->add($data);
+            echo json_encode(array('st' => 0, 'msg' => $this->lang->line('update_message')));
+        } else {
+
+            $data = array(
+                'smscountry'         => form_error('smscountry'),
+                'smscountrypassword' => form_error('smscountrypassword'),
+                'smscountrysenderid' => form_error('smscountrysenderid'),
+            );
+
+            echo json_encode(array('st' => 1, 'msg' => $data));
+        }
+    }
+
     public function textlocal()
     {
         $this->form_validation->set_error_delimiters('', '');

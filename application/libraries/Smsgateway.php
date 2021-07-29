@@ -74,6 +74,14 @@ class Smsgateway
                 );
                 $this->_CI->load->library('smscountry', $params);
                 $this->_CI->smscountry->sendSMS($send_to, $msg);
+            }  else if ($sms_detail->type == 'smseboyo') {
+                $params = array(
+                    'username' => $sms_detail->username,
+                    'senderid' => $sms_detail->senderid,
+                    'password' => $sms_detail->password,
+                );
+                $this->_CI->load->library('smseboyo', $params);
+                $this->_CI->smseboyo->sendSMS($send_to, $msg);
             } else if ($sms_detail->type == 'text_local') {
                 $to     = $send_to;
                 $params = array(
