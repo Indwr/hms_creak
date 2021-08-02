@@ -180,7 +180,7 @@ $genderList = $this->customlib->getGender();
                             <?php
                         } else {
                             ?>
-                            <img src="<?php echo base_url() ?>uploads/hospital_content/logo/<?php echo $settinglist[0]['mini_logo']; ?>" class="" alt="">
+                            <img style="height:90px;"  src="<?php echo base_url() ?>uploads/hospital_content/logo/<?php echo $settinglist[0]['mini_logo']; ?>" class="" alt="">
                             <?php
                         }
                         ?>
