@@ -81,9 +81,9 @@ if($_SERVER['HTTP_HOST']=="localhost")
 
 }else{
 	$hostname = 'localhost';
-	$username = 'admin_hms';
-	$password = 'bf6IbbkXT9';
-	$database = 'admin_hms';
+	$username = 'drstorks';
+	$password = 'K92zuMDqZrbx';
+	$database = 'drstorks_hms_new';
 }
 
 
