@@ -9,7 +9,7 @@ class Smseboyo {
     public $user = "";
     public $password = "";
     public $senderId = "";
-    public $url = "http://sms.raven.net.in/submitsms.jsp?";
+    public $url = "http://sms.raven.net.in/sendSMS?";
     public $messagetype = "N"; //Type Of Your Message
     public $DReports = "Y"; //Delivery Reports
 
@@ -26,8 +26,8 @@ class Smseboyo {
         if (!$ch) {
             die("Couldn't initialize a cURL handle");
         }
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $this->url."user=$this->user&key=$this->password&mobile=$to&message=$message&senderid=$this->senderId&accusage=1",
+          curl_setopt_array($ch, array(
+            CURLOPT_URL => $this->url."username=$this->user&message=$message&sendername=$this->senderId&smstype=TRANS&numbers=$to&apikey=$this->password",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
