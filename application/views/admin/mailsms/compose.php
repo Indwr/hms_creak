@@ -261,16 +261,15 @@
                             {
                                  if (category_set == "staff") {
                                     var email = obj.email;
-                                    var contact = obj.phone;
+                                    var contact = obj.contact_no;
                                     var name = obj.name + ' ' + obj.surname + '(' + obj.employee_id + ')';
                                 } else if (category_set == "patient") {
 
                                     var email = obj.email;
-                                    var contact = obj.mobileno;
+                                    var contact = obj.contact_no;
                                     var app_key = obj.app_key;
                                     var name = obj.patient_name + '(' + obj.patient_unique_id + ')';
                                 }
-
                                 var li = $('<li/>')
                                         .addClass('ui-menu-item')
                                         .attr('category', category_set)
@@ -337,7 +336,7 @@
                     'mobileno': mobileno,
                     'app_key':app_key
                 });
-
+console.log(arr);
                 attr[category_selected + "-" + record_id] = arr;
                 $("#search-query").attr('value', "").val("");
                 $("#search-query").attr('data-record', "");

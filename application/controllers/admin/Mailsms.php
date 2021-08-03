@@ -254,7 +254,6 @@ class Mailsms extends Admin_Controller
         $this->form_validation->set_rules('individual_send_by[]', $this->lang->line('send_through'), 'required');
         if ($this->form_validation->run()) {
             $userlisting = json_decode($this->input->post('user_list'));
-
             $user_array = array();
             foreach ($userlisting as $userlisting_key => $userlisting_value) {
                 $array = array(
@@ -294,9 +293,9 @@ class Mailsms extends Admin_Controller
                         }
                     }
                 }
-
+               
                 if ($send_sms) {
-                    foreach ($user_array as $user_mail_key => $user_mail_value) {
+                   foreach ($user_array as $user_mail_key => $user_mail_value) {
                         if ($user_mail_value['mobileno'] != "") {
                             $this->smsgateway->sendSMS($user_mail_value['mobileno'], strip_tags($message));
                         }
