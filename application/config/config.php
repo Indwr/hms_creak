@@ -29,8 +29,9 @@ if($_SERVER['HTTP_HOST']=="localhost")
 {
   $config['base_url'] = 'http://localhost/dot-com-labs/creak/hms/smart_hospital_src/';
 }else{
-  $config['base_url'] = 'https://drstorks.com/';
-
+  $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+  $domainName = $_SERVER['HTTP_HOST'] . '/';
+  $config['base_url'] = $protocol . $domainName;
 }
 
 /*
