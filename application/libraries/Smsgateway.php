@@ -81,7 +81,8 @@ class Smsgateway
                     'password' => $sms_detail->password,
                 );
                 $this->_CI->load->library('smseboyo', $params);
-                $this->_CI->smseboyo->sendSMS($send_to, $msg);
+                $response = $this->_CI->smseboyo->sendSMS($send_to, $msg);
+                return $response;
             } else if ($sms_detail->type == 'text_local') {
                 $to     = $send_to;
                 $params = array(

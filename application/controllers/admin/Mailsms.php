@@ -297,7 +297,13 @@ class Mailsms extends Admin_Controller
                 if ($send_sms) {
                    foreach ($user_array as $user_mail_key => $user_mail_value) {
                         if ($user_mail_value['mobileno'] != "") {
-                            $this->smsgateway->sendSMS($user_mail_value['mobileno'], strip_tags($message));
+                            $response = $this->smsgateway->sendSMS($user_mail_value['mobileno'], strip_tags($message));
+                            if($response === true){
+                                echo json_encode(array('status' => 0, 'msg' => "Message sent successfully"));
+                                exit;
+                            }else{
+                                echo json_encode(array('status' => 0, 'msg' => "Message not sent"));
+                            }
                         }
                     }
                 }

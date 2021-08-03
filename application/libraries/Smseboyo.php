@@ -16,6 +16,7 @@ class Smseboyo {
     function __construct($array) {
        
         $this->_CI = & get_instance();
+        require realpath(APPPATH . '../vendor/autoload.php');
         $this->user = $array['username'];
         $this->password = $array['password'];
         $this->senderId = $array['senderid'];
@@ -23,40 +24,17 @@ class Smseboyo {
 
     function sendSMS($to, $message) {
         $message = urlencode($message);
-        $ch = curl_init();
-        if (!$ch) {
-            die("Couldn't initialize a cURL handle");
-        }
+       
+        $client = new \GuzzleHttp\Client();
         $finalurl = $this->url."username=$this->user&message=$message&sendername=$this->senderId&smstype=TRANS&numbers=$to&apikey=$this->password";
-          curl_setopt_array($ch, array(
-            CURLOPT_URL => $finalurl,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-          ));
-          $response = curl_exec($ch);
-         
-        if (curl_errno($ch))
-            echo 'curl error : ' . curl_error($ch);
-            var_dump(curl_errno($ch));
-            die('first');
-        if (empty($ret)) {
-// some kind of an error happened
-            die(curl_error($ch));
-            curl_close($ch); // close cURL handler
-            die('second');
-        } else {
-            echo "<pre>";
-            $info = curl_getinfo($ch);
-            print_r($info);
-            die('final');
-            curl_close($ch); // close cURL handler
-            //echo "Message Sent Succesfully" ;
+        $response = $client->request('GET', $finalurl);
+        $responseCode = $response->getStatusCode(); // 200
+// echo $response->getHeaderLine('content-type'); // 'application/json; charset=utf8'
+// echo $response->getBody(); // '{"id": 1420053, "name": "guzzle", ...}'
+        if($responseCode == 200){
             return true;
+        }else{
+            return false;
         }
     }
 
