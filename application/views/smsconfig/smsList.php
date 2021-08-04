@@ -456,7 +456,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-5  text text-center disblock">
-                                                <a href="http://sms.raven.net.in/login" target="_blank"><img height="100px" src="http://sms.raven.net.in/UploadFile/logo/Ravensms-RavenLogosJPG.jpg"><p>http://sms.raven.net.in/</p></a>
+                                                <a href="http://sms.raven.net.in/login" target="_blank"><img height="100px" src="<?= base_url('uploads/raven-logo.jpg') ?>"><p>http://sms.raven.net.in/</p></a>
                                             </div>
                                         </div>
                                     </div>
