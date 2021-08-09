@@ -247,6 +247,12 @@ class Notification_model extends CI_Model
         $this->db->insert("read_systemnotification", $data);
     }
 
+    public function getData($table,$where)
+    {
+        $query = $this->db->select('*')->where($where)->get($table);
+        return $query->row_array();
+    }
+
     public function getcreatedByName($id)
     {
         $query = $this->db->select('staff.name,staff.surname')->where("id", $id)->get("staff");

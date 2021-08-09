@@ -20,6 +20,7 @@ class patient extends Admin_Controller
         $this->load->library('mailsmsconf');
         $this->load->library('CSVReader');
         $this->load->library('Customlib');
+        $this->load->library('smsgateway');
         $this->marital_status = $this->config->item('marital_status');
         $this->payment_mode   = $this->config->item('payment_mode');
         $this->search_type    = $this->config->item('search_type');
@@ -181,6 +182,28 @@ class patient extends Admin_Controller
 
             $sender_details = array('patient_id' => $insert_id, 'patient_name' => $patient_name, 'opd_no' => $opd_no, 'contact_no' => $mobileno, 'email' => $email);
             $result = $this->mailsmsconf->mailsms('opd_patient_registration', $sender_details);
+            //Send SMS Code Start
+            $where = ['type' => 'opd_patient_registration','is_sms' => 1];
+            $getMessageData = $this->notification_model->getData('notification_setting',$where);
+            if($getMessageData){
+                $messageData['mobileno'] = $sender_details['contact_no'];
+                $getTemplate = $getMessageData['template'];
+                $trimmed_array = array_filter(explode(' ',$getTemplate));
+                $finalArray = [];
+                foreach($trimmed_array as $value){
+                    $finalArray[] = str_replace("{{",'',$value);
+                }
+                $finalArray2 = [];
+                foreach($finalArray as $value){
+                    $finalArray2[] = str_replace("}}",'',$value);
+                }
+                $firstResponse = str_replace("{{$finalArray2[0]}}",$sender_details['patient_name'],$getTemplate);
+                $secondResponse = str_replace("{{$finalArray2[5]}}",$sender_details['patient_id'],$firstResponse);
+                $thirdResponse = str_replace("{{$finalArray2[6]}}",$sender_details['opd_no'],$secondResponse);
+                $messageData['message'] = $thirdResponse;
+                $this->sendSMS($messageData);
+            }
+            //Send Sms Code End
 
         }
         echo json_encode($array);
@@ -337,10 +360,14 @@ class patient extends Admin_Controller
 
             $sender_details = array('patient_id' => $patient_id, 'opd_no' => 'OPDN' . $opdn_id, 'contact_no' => $mobileno, 'email' => $email);
             $this->mailsmsconf->mailsms('opd_patient_revisit', $sender_details);
-
             $array = array('status' => 'success', 'error' => '', 'id' => $opd_id, 'message' => $this->lang->line('success_message'));
         }
         echo json_encode($array);
+    }
+
+
+    public function sendSMS($data){
+        $this->smsgateway->sendSMS($data['mobileno'], strip_tags($data['message']));
     }
 
     public function getPatientId()
@@ -2735,6 +2762,29 @@ class patient extends Admin_Controller
 
             $sender_details = array('patient_id' => $insert_id, 'patient_name' => $patient_name, 'ipd_no' => $ipdno, 'contact_no' => $mobileno, 'email' => $email);
             $this->mailsmsconf->mailsms('ipd_patient_registration', $sender_details);
+             //Send SMS Code Start
+             $where = ['type' => 'ipd_patient_registration','is_sms' => 1];
+             $getMessageData = $this->notification_model->getData('notification_setting',$where);
+             if($getMessageData){
+                 $messageData['mobileno'] = $sender_details['contact_no'];
+                 $getTemplate = $getMessageData['template'];
+                 $trimmed_array = array_filter(explode(' ',$getTemplate));
+                 $finalArray = [];
+                 foreach($trimmed_array as $value){
+                     $finalArray[] = str_replace("{{",'',$value);
+                 }
+                 $finalArray2 = [];
+                 foreach($finalArray as $value){
+                     $finalArray2[] = str_replace("}}",'',$value);
+                 }
+                 $firstResponse = str_replace("{{$finalArray2[0]}}",$sender_details['patient_name'],$getTemplate);
+                 $secondResponse = str_replace("{{$finalArray2[5]}}",$sender_details['patient_id'],$firstResponse);
+                 $thirdResponse = str_replace("{{$finalArray2[6]}}",$sender_details['opd_no'],$secondResponse);
+                 $messageData['message'] = $thirdResponse;
+                 $this->sendSMS($messageData);
+             }
+             //Send Sms Code End
+
         }
 
         echo json_encode($array);

@@ -205,6 +205,13 @@ footer {
 .button.button-primary:hover {
   background: #218fd9;
 }
+.button.button-danger {
+  background: red;
+  color: #fff;
+}
+.button.button-danger:hover {
+  background: red;
+}
 .button.button-secondary {
   background: transparent;
   border-color: #e8ebed;
@@ -302,7 +309,14 @@ input:disabled, input[readonly] {
 			</div>
 			<div class="flex-end">
 				<!-- <button class="button button-link">Back to Shipping</button> -->
-				<button type="submit" class="button button-primary">Proceed</button>
+        <?php 
+        
+        if($selectedClass == 'selected'){?>
+          <button type="submit" class="button button-primary">Proceed</button>
+        <?php }else{ ?>
+          <button style="display:none" type="submit" class="button button-primary procedBtn">Proceed</button>
+          <button style="display:block" type="button" class="button button-danger selectPlanBtn">please select Your Plan</button>
+        <?php }?>
 			</div>
 		</div>
 
@@ -328,6 +342,8 @@ echo $startDateFromLastExpireDate;
         let endDate;
         $('.type').removeClass('selected');
         $(this).addClass('selected');
+        $('.procedBtn').css("display","block");
+        $('.selectPlanBtn').css("display","none");
         let month = $(this).attr('data-month');
         let amount = $(this).attr('data-amount');
         let startDate = "<?= $startDateFromLastExpireDate ?>";

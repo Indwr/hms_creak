@@ -1,5 +1,4 @@
 <?php
-
 define('THEMES_DIR', 'themes');
 define('BASE_URI', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
 
@@ -60,7 +59,6 @@ class Admin_Controller extends MY_Controller {
         $this->db->limit(1);
         $query = $this->db->get();
         $data = $query->row();
-       
         if(empty($data)){
             redirect(base_url('upgrade'));
             exit();
