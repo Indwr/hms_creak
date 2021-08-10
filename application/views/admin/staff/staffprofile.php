@@ -184,7 +184,19 @@ if ($staff['id'] == $logged_in_User['id']) {
                         <?php } ?>
                         <li class=""><a href="#documents" data-toggle="tab" aria-expanded="true"><?php echo $this->lang->line('document'); ?></a></li>                       
                         <li class=""><a href="#timelineh" data-toggle="tab" aria-expanded="true"><?php echo $this->lang->line('timeline'); ?></a></li>  
-                        <li class=""><a href="#billingh" data-toggle="tab" aria-expanded="true"><?php echo $this->lang->line('billing'); ?></a></li>  
+                        <?php
+                          if($_SESSION['hospitaladmin']){
+                            if($_SESSION['hospitaladmin']['id'] == 1){ 
+                                $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                                $arr = explode('/',$actual_link);
+                                if(end($arr) == 1){
+                                ?>
+                              <li class=""><a href="#billingh" data-toggle="tab" aria-expanded="true"><?php echo $this->lang->line('billing'); ?></a></li>  
+                            <?php 
+                                }
+                            }
+                          }
+                        ?>
 
                     </ul>
                     <div class="tab-content">
