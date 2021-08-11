@@ -15,6 +15,7 @@ class Payment extends Admin_Controller
         $this->marital_status = $this->config->item('marital_status');
         $this->payment_mode   = $this->config->item('payment_mode');
         $this->blood_group    = $this->config->item('bloodgroup');
+        $this->load->library('smsgateway');
         $this->load->library('mailsmsconf');
         $this->charge_type   = $this->customlib->getChargeMaster();
         $data["charge_type"] = $this->charge_type;
@@ -449,9 +450,28 @@ class Payment extends Admin_Controller
             $array          = array('status' => 'success', 'error' => '', 'message' => 'Record Saved Successfully');
             $sender_details = array('patient_id' => $patient_id, 'ipd_id' => $ipdid, 'contact_no' => $patient['mobileno'], 'email' => $patient['email']);
             $this->mailsmsconf->mailsms('ipd_patient_discharged', $sender_details);
+             //Patient discharged SMS Code Start
+             $where = ['type' => 'ipd_patient_discharged','is_sms' => 1];
+             $getMessageData = $this->notification_model->getData('notification_setting',$where);
+             if($getMessageData){
+                 $messageData['mobileno'] = $sender_details['contact_no'];
+                 $getTemplate = $getMessageData['template'];
+                 $firstResponse = str_replace("{{patient_name}}",$sender_details['patient_name'],$getTemplate);
+                 $secondResponse = str_replace("{{currency_symbol}}",$this->lang->line('currency_symbol'),$firstResponse);
+                 $thirdResponse = str_replace("{{charge_amount}}",$this->input->post('gross_total'),$secondResponse);
+                 $fourthResponse = str_replace("{{paid_amount}}",$this->input->post('gross_total'),$thirdResponse);
+                 $fifthResponse = str_replace("{{net_amount}}",$this->input->post('net_amount'),$fourthResponse);
+                 $messageData['message'] = $fifthResponse;
+                 $this->sendSMS($messageData);
+             }
+             //Sms Code End
         }
 
         echo json_encode($array);
+    }
+
+    public function sendSMS($data){
+        $this->smsgateway->sendSMS($data['mobileno'], strip_tags($data['message']));
     }
 
     public function addopdbill()
@@ -489,6 +509,22 @@ class Payment extends Admin_Controller
             $this->payment_model->add_opdbill($data);
             $this->patient_model->add_opd($opd_data);
             $this->mailsmsconf->mailsms('opd_patient_discharged', $sender_details);
+
+             //Patient discharged SMS Code Start
+             $where = ['type' => 'opd_patient_discharged','is_sms' => 1];
+             $getMessageData = $this->notification_model->getData('notification_setting',$where);
+             if($getMessageData){
+                 $messageData['mobileno'] = $sender_details['contact_no'];
+                 $getTemplate = $getMessageData['template'];
+                 $firstResponse = str_replace("{{opd_no}}",$sender_details['opd_id'],$getTemplate);
+                 $secondResponse = str_replace("{{patient_name}}",$patient['patient_name'],$firstResponse);
+                 $thirdResponse = str_replace("{{currency_symbol}}",$this->lang->line('currency_symbol'),$secondResponse);
+                 $fourthResponse = str_replace("{{billing_amount}}",$this->input->post('net_amount'),$thirdResponse);
+                 $messageData['message'] = $fourthResponse;
+                 $this->sendSMS($messageData);
+             }
+             //Sms Code End
+
             $array = array('status' => 'success', 'error' => '', 'message' => 'Record Saved Successfully');
         }
 

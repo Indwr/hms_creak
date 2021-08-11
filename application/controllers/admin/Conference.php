@@ -11,6 +11,7 @@ class Conference extends Admin_Controller
     {
         parent::__construct();
         $this->load->library('mailsmsconf');
+        $this->load->library('smsgateway');
         $this->load->model(array('conference_model', 'conferencehistory_model'));
         $this->conference_setting = $this->setting_model->getzoomsetting();
     }
@@ -377,6 +378,20 @@ class Conference extends Admin_Controller
                     $conferenceid                    = $this->conference_model->add($insert_array);
                     $sender_details                  = array('patient_id' => $this->input->post('patient_id'), 'conference_id' => $conferenceid, 'contact_no' => $this->input->post('mobileno'), 'email' => $this->input->post('email'));
                     $this->mailsmsconf->mailsms('live_consult', $sender_details);
+                      //Send Revist SMS Code Start
+                        $where = ['type' => 'live_consult','is_sms' => 1];
+                        $getMessageData = $this->notification_model->getData('notification_setting',$where);
+                        if($getMessageData){
+                            $messageData['mobileno'] = $sender_details['mobileno'];
+                            $getTemplate = $getMessageData['template'];
+                            $firstResponse = str_replace("{{title}}",$insert_array['title'],$getTemplate);
+                            $secondResponse = str_replace("{{date}}",$insert_array['date'],$firstResponse);
+                            $thirdResponse = str_replace("{{duration}}",$insert_array['duration'],$secondResponse);
+                            $messageData['message'] = $thirdResponse;
+                            $this->sendSMS($messageData);
+                        }
+                        //Send Sms Code End
+
                     $response = array('status' => 1, 'message' => $this->lang->line('success_message'));
                 } else {
                     $response = array('status' => 0, 'error' => array($response->message));
@@ -495,6 +510,13 @@ class Conference extends Admin_Controller
                         }
 
                         $this->mailsmsconf->mailsms('live_meeting', $sender_details);
+                        foreach ($sender_details as $v) {
+                            $details['title'] = $v['title'];
+                            $details['date'] = $v['date'];
+                            $details['duration'] = $v['duration'];
+                            $details['mobileno'] = $v['contact_no'];
+                            $this->sendSMSCode($details);
+                        }
                     }
                     $response = array('status' => 1, 'message' => $this->lang->line('success_message'));
                 } else {
@@ -512,6 +534,25 @@ class Conference extends Admin_Controller
             ->set_status_header(200)
             ->set_output(json_encode($response));
     }
+
+    public function sendSMSCode($details){
+        //Send Revist SMS Code Start
+        $where = ['type' => 'live_meeting','is_sms' => 1];
+        $getMessageData = $this->notification_model->getData('notification_setting',$where);
+        if($getMessageData){
+            $messageData['mobileno'] = $details['mobileno'];
+            $getTemplate = $getMessageData['template'];
+            $firstResponse = str_replace("{{title}}",$details['title'],$getTemplate);
+            $secondResponse = str_replace("{{date}}",$details['date'],$firstResponse);
+            $thirdResponse = str_replace("{{duration}}",$details['duration'],$secondResponse);
+            $messageData['message'] = $thirdResponse;
+            $this->sendSMS($messageData);
+        }
+        //Send Sms Code End
+}
+public function sendSMS($data){
+    $this->smsgateway->sendSMS($data['mobileno'], strip_tags($data['message']));
+}
 
     public function chgstatus()
     {

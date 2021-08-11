@@ -18,6 +18,7 @@ class Appointment extends Admin_Controller
         $this->search_type             = $this->config->item('search_type');
         $this->load->library('mailsmsconf');
         $this->load->library('Enc_lib');
+        $this->load->library('smsgateway');
         $this->load->model('appoint_priority_model');
         $this->appointment_status = $this->config->item('appointment_status');
     }
@@ -97,12 +98,37 @@ class Appointment extends Admin_Controller
             if ($status != 'approved') {
                 $this->appointmentCreateNotification($patient_id, $patient_name, $url,$date_appoint);
             } else {
-
+                $query  = $this->db->where("id", $this->input->post('doctorid'))->get("staff");
+                $result = $query->row_array();
+                $appointment['name'] = $result['name'];
+                $appointment['surname'] = $result['surname'];
+                $this->sendSMSCode($appointment);
                 $this->appointmentApprovedNotification($patient_id, $this->input->post('doctor'), $this->input->post('patient_name'), $url,$date_appoint);
             } 
             $array = array('status' => 'success', 'error' => '', 'message' => $this->lang->line('success_message'));
         }
         echo json_encode($array);
+    }
+
+    public function sendSMSCode($details){
+            //Send Revist SMS Code Start
+            $where = ['type' => 'appointment_approved','is_sms' => 1];
+            $getMessageData = $this->notification_model->getData('notification_setting',$where);
+            if($getMessageData){
+                $messageData['mobileno'] = $details['mobileno'];
+                $getTemplate = $getMessageData['template'];
+                $firstResponse = str_replace("{{patient_name}}",$details['patient_name'],$getTemplate);
+                $secondResponse = str_replace("{{staff_name}}",$details['name'],$firstResponse);
+                $thirdResponse = str_replace("{{staff_surname}}",$details['surname'],$secondResponse);
+                $fourthResponse = str_replace("{{date}}",$details['date'],$thirdResponse);
+                $fifthResponse = str_replace("{{appointment_no}}",$details['appointment_no'],$fourthResponse);
+                $messageData['message'] = $fifthResponse;
+                $this->sendSMS($messageData);
+            }
+            //Send Sms Code End
+    }
+    public function sendSMS($data){
+        $this->smsgateway->sendSMS($data['mobileno'], strip_tags($data['message']));
     }
 
     public function appointmentCreateNotification($patient_id = '', $patient_name = '', $url,$date_appoint)
@@ -166,6 +192,7 @@ class Appointment extends Admin_Controller
         $this->appointmentApprovedNotification($appointment_details["patient_id"], $appointment_details["doctor"], $appointment_details["patient_name"], $url,$date_appoint);
         $sender_details = array('patient_id' => $appointment_details["patient_id"], 'appointment_id' => $id, 'contact_no' => $appointment_details["mobileno"], 'email' => $appointment_details["email"]);
         $this->mailsmsconf->mailsms('appointment_approved', $sender_details);
+        $this->sendSMSCode($appointment_details);
         redirect('admin/appointment/search');
     }
 

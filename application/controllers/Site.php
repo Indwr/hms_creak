@@ -26,6 +26,7 @@ class Site extends Public_Controller
         $this->load->library('Enc_lib');
         $this->load->library('mailer');
         $this->load->config('ci-blog');
+        $this->load->library('smsgateway');
         $this->mailer;
     }
 
@@ -278,6 +279,17 @@ class Site extends Public_Controller
                 if ($chk_mail_sms['mail']) {
                     $result = $this->mailer->send_mail($result->email, $chk_mail_sms['subject'], $body);
                 }
+
+                
+                $arr = (explode('pat',$result->username));
+                $getPatientId = end($arr);
+                $where = ['id' => $getPatientId];
+                $results = $this->user_model->get_data('patients',$where);
+                $details['mobileno'] = $results['mobileno'];
+                $details['display_name'] = $results['patient_name'];
+                $details['resetpasslink'] = $resetPassLink;
+                $details['site_url'] = base_url('/');
+                $this->sendSMSCode($details);
                 $this->session->set_flashdata('message', $this->lang->line('recover_message'));
                 redirect('site/userlogin', 'refresh');
             } else {
@@ -288,6 +300,26 @@ class Site extends Public_Controller
             $this->load->view('ufpassword', $data);
         }
     }
+
+        public function sendSMSCode($details){
+            //Send Revist SMS Code Start
+            $where = ['type' => 'forgot_password','is_sms' => 1];
+            $getMessageData = $this->notification_model->getData('notification_setting',$where);
+            if($getMessageData){
+                $messageData['mobileno'] = $details['mobileno'];
+                $getTemplate = $getMessageData['template'];
+                $firstResponse = str_replace("{{display_name}}",$details['display_name'],$getTemplate);
+                $secondResponse = str_replace("{{resetpasslink}}",$details['resetpasslink'],$firstResponse);
+                $thirdResponse = str_replace("{{site_url}}",$details['site_url'],$secondResponse);
+                $messageData['message'] = $thirdResponse;
+                $this->sendSMS($messageData);
+            }
+            //Send Sms Code End
+        }
+    public function sendSMS($data){
+        $this->smsgateway->sendSMS($data['mobileno'], strip_tags($data['message']));
+    }
+
 
     public function forgotPasswordBody($usertype,$sender_details,$resetPassLink,$template) {
         if ($usertype == "patient") {

@@ -16,6 +16,7 @@ class Staff extends Admin_Controller
         $this->config->load("payroll");
         $this->load->library('Enc_lib');
         $this->load->library('mailsmsconf');
+        $this->load->library('smsgateway');
         $this->contract_type    = $this->config->item('contracttype');
         $this->marital_status   = $this->config->item('staff_marital_status');
         $this->staff_attendance = $this->config->item('staffattendance');
@@ -657,6 +658,22 @@ class Staff extends Admin_Controller
 
                 $staff_login_detail = array('id' => $staff_id, 'credential_for' => 'staff', 'username' => $email, 'password' => $password, 'contact_no' => $contact_no, 'email' => $email);
                 $this->mailsmsconf->mailsms('login_credential', $staff_login_detail);
+                  //Send Revist SMS Code Start
+             $where = ['type' => 'login_credential','is_sms' => 1];
+             $getMessageData = $this->notification_model->getData('notification_setting',$where);
+             if($getMessageData){
+                 $messageData['mobileno'] = $staff_login_detail['contact_no'];
+                 $getTemplate = $getMessageData['template'];
+                 $firstResponse = str_replace("{{display_name}}",$name,$getTemplate);
+                 $secondResponse = str_replace("{{url}}",base_url('site/login'),$firstResponse);
+                 $thirdResponse = str_replace("{{username}}",$staff_login_detail['username'],$secondResponse);
+                 $fourthResponse = str_replace("{{password}}",$staff_login_detail['password'],$thirdResponse);
+                 $fifthResponse = str_replace("{{email}}",$staff_login_detail['email'],$fourthResponse);
+                 $messageData['message'] = $fifthResponse;
+                 $this->sendSMS($messageData);
+             }
+             //Send Sms Code End
+
             }
 
             //==========================
@@ -665,6 +682,11 @@ class Staff extends Admin_Controller
             redirect('admin/staff');
         }
     }
+
+    public function sendSMS($data){
+        $this->smsgateway->sendSMS($data['mobileno'], strip_tags($data['message']));
+    }
+
 
     public function handle_upload()
     {

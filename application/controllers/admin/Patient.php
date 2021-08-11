@@ -361,6 +361,20 @@ class patient extends Admin_Controller
             $sender_details = array('patient_id' => $patient_id, 'opd_no' => 'OPDN' . $opdn_id, 'contact_no' => $mobileno, 'email' => $email);
             $this->mailsmsconf->mailsms('opd_patient_revisit', $sender_details);
             $array = array('status' => 'success', 'error' => '', 'id' => $opd_id, 'message' => $this->lang->line('success_message'));
+             //Send Revist SMS Code Start
+             $where = ['type' => 'opd_patient_revisit','is_sms' => 1];
+             $getMessageData = $this->notification_model->getData('notification_setting',$where);
+             if($getMessageData){
+                 $messageData['mobileno'] = $sender_details['contact_no'];
+                 $getTemplate = $getMessageData['template'];
+                 $firstResponse = str_replace("{{patient_name}}",$sender_details['patient_name'],$getTemplate);
+                 $secondResponse = str_replace("{{patient_unique_id}}",$sender_details['patient_id'],$firstResponse);
+                 $thirdResponse = str_replace("{{opd_no}}",$sender_details['opd_no'],$secondResponse);
+                 $messageData['message'] = $thirdResponse;
+                 $this->sendSMS($messageData);
+             }
+             //Send Sms Code End
+
         }
         echo json_encode($array);
     }

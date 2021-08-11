@@ -365,6 +365,13 @@ class User_model extends CI_Model
         }
     }
 
+    public function get_data($table,$where)
+    {
+        $this->db->where($where);
+        $query = $this->db->get($table);
+        return $query->row();
+    }
+
     public function getUserValidCode($table, $role, $code)
     {
         $this->db->select($table . '.*,users.id as `user_tbl_id`,users.username,users.password as `user_tbl_password`');
