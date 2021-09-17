@@ -34,7 +34,7 @@
 			
 			
 			<?php  if ($this->rbac->hasPrivilege('superadmin')) {    ?> 
-				<li class="<?php echo set_Innermenu('admin/updater/index'); ?>"><a class="<?php echo set_Innermenu('admin/updater/index'); ?>" href="<?php echo base_url(); ?>admin/updater"><?php echo $this->lang->line('system_update'); ?></a></li>
+				<!-- <li class="<?php echo set_Innermenu('admin/updater/index'); ?>"><a class="<?php echo set_Innermenu('admin/updater/index'); ?>" href="<?php echo base_url(); ?>admin/updater"><?php echo $this->lang->line('system_update'); ?></a></li> -->
 				
                        
 <?php } ?>
