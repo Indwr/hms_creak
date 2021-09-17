@@ -346,7 +346,7 @@ $genderList = $this->customlib->getGender();
                             <input type="text" id="credit_limit" name="credit_limit" class="form-control">
                             <span class="text-danger"><?php echo form_error('credit_limit'); ?></span>
                         </div>
-                      <div class="col-md-12">
+                      /* <div class="col-md-12">
                                         <div class="settinghr"></div>
                                         <div class="relative">     
                                             <h4 class="session-head"><?php echo $this->lang->line('mobile_app'); ?></h4>
@@ -359,9 +359,9 @@ $genderList = $this->customlib->getGender();
                                         </div>
 
 
-                                    </div><!--./col-md-12-->
+                                    </div> */
 
-						<div class="form-group  col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						/* <div class="form-group  col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <label for="exampleInputEmail1"><?php echo $this->lang->line('mobile_app_api_url'); ?></label>
                             <input type="text" name="sch_mobile_api_url" id="mobile_api_url" class="form-control">
                             <span class="text-danger"><?php echo form_error('mobile_api_url'); ?></span>
@@ -375,7 +375,7 @@ $genderList = $this->customlib->getGender();
                             <label for="exampleInputEmail1"><?php echo $this->lang->line('app_secondary_color_code'); ?></label>
                             <input type="text" name="sch_app_secondary_color_code" id="app_secondary_color_code" class="form-control">
                             <span class="text-danger"><?php echo form_error('app_secondary_color_code'); ?></span>
-                        </div>
+                        </div> */
                         
                         <div class="form-group  col-xs-12 col-sm-12 col-md-12 col-lg-6">
                             <label for="IsSmallBusiness"><?php echo $this->lang->line('doctor_restriction_mode'); ?></label>
