@@ -34,7 +34,7 @@ class Payu extends Patient_Controller
         $data["payment_type"] = 'ipd';
         $this->session->set_userdata('payment_type', 'ipd');
 
-        $data['productinfo'] = "bill payment smart hospital";
+        $data['productinfo'] = "bill payment Dr storks";
         if ($this->session->has_userdata('payment_amount')) {
             $amount                  = $this->session->userdata('payment_amount');
             $ipdid                   = $amount['record_id'];
@@ -103,7 +103,7 @@ class Payu extends Patient_Controller
         $data                = array();
         $id                  = $this->patient_data['patient_id'];
         $data["id"]          = $id;
-        $data['productinfo'] = "bill payment smart hospital";
+        $data['productinfo'] = "bill payment Dr Stocks";
         if ($this->session->has_userdata('payment_amount')) {
             $PAYU_BASE_URL        = "https://sandboxsecure.payu.in";
             $amount               = $this->session->userdata('payment_amount');

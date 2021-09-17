@@ -35,7 +35,7 @@ class Stripe extends Patient_Controller
         $data                = array();
         $id                  = $this->patient_data['patient_id'];
         $data["id"]          = $id;
-        $data['productinfo'] = "bill payment smart hospital";
+        $data['productinfo'] = "bill payment Dr storks";
         if ($this->session->has_userdata('payment_amount')) {
             $amount                      = $this->session->userdata('payment_amount');
             $ipdid                       = $amount['record_id'];
@@ -70,7 +70,7 @@ class Stripe extends Patient_Controller
         $data                = array();
         $id                  = $this->patient_data['patient_id'];
         $data["id"]          = $id;
-        $data['productinfo'] = "bill payment smart hospital";
+        $data['productinfo'] = "bill payment Dr Storks";
         if ($this->session->has_userdata('payment_amount')) {
             $amount                      = $this->session->userdata('payment_amount');
             $ipdid                       = $amount['record_id'];

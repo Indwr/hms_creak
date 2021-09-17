@@ -75,7 +75,7 @@ $query_builder = TRUE;
 if($_SERVER['HTTP_HOST']=="localhost")
 {
 	$hostname = 'localhost';
-	$username = 'root';
+	$username = 'sonu';
 	$password = 'password';
 	$database = 'creak_hms';
 

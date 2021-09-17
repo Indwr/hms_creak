@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 if($_SERVER['HTTP_HOST']=="localhost")
 {
-  $config['base_url'] = 'http://localhost/dot-com-labs/creak/hms/smart_hospital_src/';
+  $config['base_url'] = 'http://localhost/dot-com-labs/hms_creak/';
 }else{
   $config['base_url'] = 'https://drstorks.com/';
 }

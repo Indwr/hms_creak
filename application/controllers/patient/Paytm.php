@@ -51,7 +51,7 @@ class Paytm extends Patient_Controller
         $data['name']         = $patient_detail['name'];
         $data["payment_type"] = 'ipd';
         $data['theme_color']  = $patient_detail['app_primary_color_code'];
-        $data['title']        = 'Bill Payment Smart Hospital';
+        $data['title']        = 'Bill Payment Dr storks';
         $posted               = $_POST;
         $paytmParams          = array();
         $ORDER_ID             = time();
@@ -104,7 +104,7 @@ class Paytm extends Patient_Controller
         $data['currency']    = $patient_detail['currency'];
         $data['name']        = $patient_detail['name'];
         $data['theme_color'] = $patient_detail['app_primary_color_code'];
-        $data['title']       = 'Bill Payment Smart Hospital';
+        $data['title']       = 'Bill Payment Dr Stocks';
 
         $posted      = $_POST;
         $paytmParams = array();

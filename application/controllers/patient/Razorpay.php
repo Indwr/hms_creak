@@ -30,7 +30,7 @@ class Razorpay extends Patient_Controller
         $data                = array();
         $id                  = $this->patient_data['patient_id'];
         $data["id"]          = $id;
-        $data['productinfo'] = "bill payment smart hospital";
+        $data['productinfo'] = "bill payment Dr Stocks";
         if ($this->session->has_userdata('payment_amount')) {
             $paymentDetails              = $this->payment_model->paymentDetails($id);
             $balance_amount              = $this->payment_model->getBalanceTotal($id);
@@ -65,7 +65,7 @@ class Razorpay extends Patient_Controller
         $data                = array();
         $id                  = $this->patient_data['patient_id'];
         $data["id"]          = $id;
-        $data['productinfo'] = "bill payment smart hospital";
+        $data['productinfo'] = "bill payment Dr storks";
         if ($this->session->has_userdata('payment_amount')) {
             $paymentDetails              = $this->payment_model->opdpaymentDetails($id);
             $balance_amount              = $this->payment_model->getOPDBalanceTotal($id);
@@ -122,7 +122,7 @@ class Razorpay extends Patient_Controller
         $data['currency']    = $patient_detail['currency'];
         $data['name']        = $patient_detail['name'];
         $data['theme_color'] = $patient_detail['app_primary_color_code'];
-        $data['title']       = 'Bill Payment Smart Hospital';
+        $data['title']       = 'Bill Payment Dr Storks';
         $data['return_url']  = site_url() . 'patient/razorpay/callback';
         $logoresult          = $this->customlib->getLogoImage();
         if (!empty($logoresult["mini_logo"])) {
